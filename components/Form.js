@@ -3,11 +3,15 @@ import { useState } from "react";
 
 const Form = () => {
   const [uploaded, setuploaded] = useState(0);
+  const [data, setdata] = useState({
+    title: "",
+    description: "",
+    url: "",
+    public_id: "",
+  });
   const onChange = async (event) => {
-    console.log(event);
     const formData = new FormData();
     let files = event.target.files;
-    let name = event.target.name;
     formData.append("image", files[0]);
     const config = {
       headers: { "content-type": "multipart/form-data" },
@@ -16,20 +20,35 @@ const Form = () => {
         setuploaded(uploadedData);
       },
     };
-    const { data } = await axios.post(
+    const { data: dataCome } = await axios.post(
       "/api/upload?path=blogs",
       formData,
       config
     );
-    console.log(data);
+    setdata({ ...data, public_id: dataCome.public_id, url: dataCome.url });
   };
+  const handlechange = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    setdata({ ...data, [name]: value });
+  };
+  const submit = (e) => {
+    e.preventDefault();
+    axios.post("/api/post", data).then(({ data }) => {
+      console.log(data);
+    });
+  };
+  console.log("data", data);
   return (
     <div className="w-full max-w-xs">
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <form
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        onSubmit={submit}
+      >
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            for="title"
+            htmlFor="title"
           >
             Title
           </label>
@@ -38,24 +57,28 @@ const Form = () => {
             id="title"
             type="text"
             placeholder="title"
+            onChange={handlechange}
+            name="title"
           />
         </div>
         <div className="mb-6">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            for="description"
+            htmlFor="description"
           >
             Description
           </label>
           <textarea
             className="shadow h-48 appearance-none  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
             id="description"
+            onChange={handlechange}
+            name="description"
           />
         </div>
         <div className="mb-6">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            for="image"
+            htmlFor="image"
           >
             Select in Image
           </label>

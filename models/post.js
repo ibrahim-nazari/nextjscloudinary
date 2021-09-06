@@ -6,12 +6,8 @@ let post = new Schema(
   {
     title: { type: String },
     description: { type: String },
-    image: {
-      type: String,
-      default: "/images/users/user.svg",
-      trim: true,
-      maxLength: 150,
-    },
+    public_id: String,
+    url: String,
   },
   { timestamps: true }
 );
