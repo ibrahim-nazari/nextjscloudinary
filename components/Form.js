@@ -1,7 +1,10 @@
 import axios from "axios";
+import { useState } from "react";
 
 const Form = () => {
+  const [uploaded, setuploaded] = useState(0);
   const onChange = async (event) => {
+    console.log(event);
     const formData = new FormData();
     let files = event.target.files;
     let name = event.target.name;
@@ -10,7 +13,7 @@ const Form = () => {
       headers: { "content-type": "multipart/form-data" },
       onUploadProgress: (event) => {
         let uploadedData = Math.round((event.loaded * 100) / event.total);
-        setUploaded(uploadedData);
+        setuploaded(uploadedData);
       },
     };
     const { data } = await axios.post(
@@ -18,6 +21,7 @@ const Form = () => {
       formData,
       config
     );
+    console.log(data);
   };
   return (
     <div className="w-full max-w-xs">
@@ -57,13 +61,13 @@ const Form = () => {
           </label>
           <label className="w-64 flex flex-col items-center px-4 py-6 bg-white rounded-md shadow-md tracking-wide uppercase border border-blue cursor-pointer hover:bg-purple-600 hover:text-white text-purple-600 ease-linear transition-all duration-150">
             <span className="mt-2 text-base leading-normal">Select a file</span>
-            <input type="file" className="hidden" />
+            <input type="file" className="hidden" onChange={onChange} />
           </label>
         </div>
         <div className="flex items-center justify-between">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
+            type="submit"
           >
             Post
           </button>
