@@ -36,7 +36,7 @@ const Gallery = () => {
                 <img
                   style={{ width: "400px", height: "200px" }}
                   className="rounded shadow-md"
-                  src={post.url}
+                  src={makeUrl(post.url)}
                   alt=""
                 />
                 {console.log(makeUrl(post.url))}
