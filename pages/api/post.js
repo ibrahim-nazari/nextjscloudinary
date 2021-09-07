@@ -4,6 +4,7 @@ import Post from "../../models/post";
 const handler = async (req, res) => {
   if (req.method == "POST") {
     try {
+      console.log(req.body);
       const post = new Post(req.body);
       console.log(req.body);
       const saved = await post.save();
